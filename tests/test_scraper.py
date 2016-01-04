@@ -5,6 +5,7 @@ from nose.tools import eq_
 from scraper.schedule_list_scraper import ScheduleListScraper
 from scraper.race_list_scraper import RaceListScraper
 from scraper.race_result_scraper import RaceResultScraper
+from scraper.horse_scraper import HorseScraper
 
 resources_dir = '{}/resources/'.format(os.path.dirname(__file__))
 
@@ -35,4 +36,12 @@ class TestScraper(TestCase):
         with open('{}/race_result.json'.format(resources_dir)) as f:
             expected = [json.load(f)]
         actual = scraper.crawl(['race_result.html'])
+        eq_(expected, actual)
+
+    def test_horse(self):
+        scraper = HorseScraper()
+        scraper.download = mock.MagicMock(side_effect=download)
+        with open('{}/horse.json'.format(resources_dir)) as f:
+            expected = [json.load(f)]
+        actual = scraper.crawl(['horse.html'])
         eq_(expected, actual)
