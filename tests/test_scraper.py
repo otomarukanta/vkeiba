@@ -7,6 +7,7 @@ from scraper.race_list_scraper import RaceListScraper
 from scraper.race_result_scraper import RaceResultScraper
 from scraper.horse_scraper import HorseScraper
 from scraper.jockey_scraper import JockeyScraper
+from scraper.trainer_scraper import TrainerScraper
 
 resources_dir = '{}/resources/'.format(os.path.dirname(__file__))
 
@@ -53,4 +54,12 @@ class TestScraper(TestCase):
         with open('{}/jockey.json'.format(resources_dir)) as f:
             expected = [json.load(f)]
         actual = scraper.crawl(['jockey.html'])
+        eq_(expected, actual)
+
+    def test_trainer(self):
+        scraper = TrainerScraper()
+        scraper.download = mock.MagicMock(side_effect=download)
+        with open('{}/trainer.json'.format(resources_dir)) as f:
+            expected = [json.load(f)]
+        actual = scraper.crawl(['trainer.html'])
         eq_(expected, actual)
