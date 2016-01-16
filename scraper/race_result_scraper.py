@@ -21,9 +21,11 @@ class RaceResultScraper(Scraper):
 
     def _parse(self):
         res = dict()
-        race_id = self.regex_race_id.findall(
-            self.soup.find_all(
-                'meta', attrs={'property': 'og:url'})[0]['content'])[0]
+        url = self.soup.find_all(
+            'meta', attrs={'property': 'og:url'})[0]['content']
+        if 'denma' in url:
+            return
+        race_id = self.regex_race_id.findall(url)[0]
         res['result'] = self._parse_result()
         for i in range(len(res['result'])):
             res['result'][i]['race_id'] = race_id
