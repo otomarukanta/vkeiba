@@ -55,8 +55,8 @@ class RaceResultScraper(Scraper):
         res = dict()
         res['row_id'] = str(idx)
         res['final_position'] = record[0].text
-        res['bracket'] = record[1].text
-        res['post_position'] = record[2].text
+        res['frame_number'] = record[1].text
+        res['horse_number'] = record[2].text
         res['horse_id'] = self.regex_path.findall(record[3].a['href'])[0]
         res['sex'], res['age'] = self.regex_sex_age.findall(record[4].text)[0]
         res['jockey_id'] = self.regex_path.findall(record[5].a['href'])[0]
@@ -64,14 +64,12 @@ class RaceResultScraper(Scraper):
         res['margin'] = record[7].text
         res['passing_position'] = record[8].text
         res['last_3f'] = record[9].text
-        res['impost'] = record[10].text
-        weight = self.regex_weight.findall(record[11].text)
-        if not weight:
-            weight = ['0', '0']
+        res['jockey_weight'] = record[10].text
+        weight = self.regex_weight.findall(record[11].text)[0][0]
+        if weight:
+            res['horse_weight'] = weight
         else:
-            weight = weight[0]
-        res['weight'] = weight[0]
-        res['weight_change'] = weight[1]
+            res['horse_weight'] = ''
         res['popularity'] = record[12].text
         res['ozz'] = record[13].text
         res['blinker'] = record[14].text
