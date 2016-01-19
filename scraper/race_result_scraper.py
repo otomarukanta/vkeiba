@@ -71,7 +71,7 @@ class RaceResultScraper(Scraper):
         else:
             res['horse_weight'] = ''
         res['popularity'] = record[12].text
-        res['ozz'] = record[13].text
+        res['odds'] = record[13].text
         res['blinker'] = record[14].text
 
         return {k: v.strip() for k, v in res.items()}
