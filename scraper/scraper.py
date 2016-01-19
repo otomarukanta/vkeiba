@@ -31,4 +31,4 @@ class Scraper(metaclass=ABCMeta):
         loop = asyncio.get_event_loop()
         task = [self._scrape(path) for path in paths]
         result = loop.run_until_complete(asyncio.gather(*task))
-        return result
+        return [res for res in result if res]
