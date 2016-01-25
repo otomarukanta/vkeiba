@@ -8,7 +8,7 @@ class RaceResultScraper(Scraper):
         self.regex_race_id = re.compile("race\/result\/(\d+)")
         self.regex_path = re.compile("/\w+/\w+/(\d+)/")
         self.regex_sex_age = re.compile("(\w+)(\d+)")
-        self.regex_weight = re.compile("(\d*)\(([+-]?\d*)\)")
+        self.regex_weight = re.compile("(\d*)\((.*?)\)")
         self.regex_day = re.compile(r"(\d*)年(\d*)月(\d*)日.*?(\d*)回"
                                     "(.*?)(\d)日.*?(\d*:\d*)発走")
         self.regex_title = re.compile(r"競馬 - (.+?) 結果 - スポーツナビ")

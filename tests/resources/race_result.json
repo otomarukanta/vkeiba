@@ -22,19 +22,22 @@
   [
     "/directory/jocky/00001/",
     "/directory/jocky/00002/",
-    "/directory/jocky/00003/"
+    "/directory/jocky/00003/",
+    "/directory/jocky/00004/"
   ],
   "horse":
   [
     "/directory/horse/0000000001/",
     "/directory/horse/0000000002/",
-    "/directory/horse/0000000003/"
+    "/directory/horse/0000000003/",
+    "/directory/horse/0000000004/"
   ],
   "trainer":
   [
     "/directory/trainer/00001/",
     "/directory/trainer/00002/",
-    "/directory/trainer/00003/"
+    "/directory/trainer/00003/",
+    "/directory/trainer/00004/"
   ],
   "result":
   [
@@ -96,6 +99,26 @@
       "final_position": "中止",
       "row_id": "2",
       "popularity": "2",
+      "horse_weight": "500"
+    },
+    {
+      "passing_position": "",
+      "age": "5",
+      "margin": "",
+      "race_id": "0123456789",
+      "jockey_id": "00004",
+      "time": "",
+      "blinker": "B",
+      "horse_number": "1",
+      "frame_number": "1",
+      "odds": "34.5",
+      "horse_id": "0000000004",
+      "last_3f": "12.3",
+      "sex": "せん",
+      "jockey_weight": "60.0",
+      "final_position": "3",
+      "row_id": "3",
+      "popularity": "4",
       "horse_weight": "500"
     }
   ]
