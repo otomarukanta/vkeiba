@@ -25,6 +25,7 @@ class Scraper(metaclass=ABCMeta):
         return os.path.exists(self._hash(path))
 
     def _get_cache(self, path):
+        print('Get page from cache in {} at {}'.format(path, datetime.now()))
         with gzip.open(self._hash(path), 'rb') as f:
             data = f.read()
         return data
