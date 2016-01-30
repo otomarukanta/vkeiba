@@ -10,6 +10,6 @@ test:
   pre:
     - flake8 scraper
   override:
-    - nosetests --with-coverage --cover-package=scraper --cover-html
+    - nosetests --with-coverage --cover-package=crawler --cover-html
   post:
     - mv cover $CIRCLE_ARTIFACTS
