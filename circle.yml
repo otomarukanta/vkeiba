@@ -8,7 +8,7 @@ dependencies:
 
 test:
   pre:
-    - flake8 scraper
+    - flake8 crawler
   override:
     - nosetests --with-coverage --cover-package=crawler --cover-html
   post:
