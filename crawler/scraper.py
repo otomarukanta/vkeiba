@@ -10,10 +10,11 @@ import gzip
 
 class Scraper(metaclass=ABCMeta):
 
-    def __init__(self, parse):
+    def __init__(self, parse, store):
         self._baseurl = 'http://keiba.yahoo.co.jp/'
         self._semaphore = asyncio.Semaphore(5)
         self._parse = parse
+        self._store = store
 
     def _hash(self, path):
         return 'cache/{}'.format(hashlib.md5(path.encode('utf-8')).hexdigest())
@@ -48,7 +49,7 @@ class Scraper(metaclass=ABCMeta):
             self._save_cache(path, page)
         soup = bs4.BeautifulSoup(page, 'lxml')
         parsed = self._parse(soup)
-        return parsed
+        self._store(parsed)
 
     def crawl(self, paths):
         loop = asyncio.get_event_loop()
