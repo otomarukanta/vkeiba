@@ -22,7 +22,7 @@ class TestPathStorage(TestCase):
         ok_(os.path.isfile(filename))
         os.remove('/tmp/path_storage.txt')
 
-    def test_duplicated_path(self):
+    def test_duplicate_path(self):
         self.storage.store(['/path/aaa/'])
         self.storage.store(['/path/aaa/'])
         with open(self.filename) as f:
