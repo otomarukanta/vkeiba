@@ -127,8 +127,8 @@ def parse_race_result(soup):
         res = dict()
         schedule = regex_day.findall(
             soup.find(id='raceTitDay').text)[0]
-        res['date'] = date(int(schedule[0]), int(schedule[1]),
-                           int(schedule[2])).isoformat()
+        res['race_date'] = date(int(schedule[0]), int(schedule[1]),
+                                int(schedule[2])).isoformat()
         res['times'] = schedule[3]
         res['place'] = schedule[4]
         res['days'] = schedule[5]
@@ -143,7 +143,7 @@ def parse_race_result(soup):
         meta = regex_meta.findall(
             soup.find(id='raceTitMeta').text)[0]
         res['track_type'] = meta[0]
-        res['round'] = meta[1]
+        res['rotation'] = meta[1]
         res['distance'] = meta[2]
         res['race_condition'] = meta[3]
 

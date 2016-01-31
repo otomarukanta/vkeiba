@@ -3,7 +3,7 @@
   {
     "days": "1",
     "race_id": "0123456789",
-    "round": "右",
+    "rotation": "右",
     "place": "中山",
     "weather": "晴",
     "track_condition": "良",
@@ -11,7 +11,7 @@
     "race_name": "サラ系2歳未勝利",
     "money": "本賞金：500、200、130、75、50万円",
     "times": "5",
-    "date": "2015-12-05",
+    "race_date": "2015-12-05",
     "race_condition": "サラ系2歳",
     "start_time": "9:50",
     "grade": "未勝利",
