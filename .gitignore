@@ -3,3 +3,6 @@
 __pycache__/
 cover/
 coverage.xml
+cache/
+path/
+conf/
