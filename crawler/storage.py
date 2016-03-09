@@ -1,7 +1,9 @@
 from abc import ABCMeta, abstractmethod
 import os
 import json
-import pymysql
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from crawler import model
 
 
 class Storage(metaclass=ABCMeta):
@@ -29,36 +31,26 @@ class PathStorage(Storage):
                 f.write('\n')
 
 
-class MySQL():
-
-    def __init__(self):
-        with open('conf/db.json', 'r') as f:
-            self._cursor = pymysql.connect(**json.load(f)).cursor()
-
-    def manyinsert(self, table, dic_list):
-        for dic in dic_list:
-            self.insert(table, dic)
-
-    def insert(self, table, dic):
-        values = ["'{}'".format(v) for v in dic.values()]
-        statement = 'INSERT INTO {} ({}) VALUES ({})'.format(
-                    table, ','.join(dic.keys()), ','.join(values))
-        print(statement)
-        self._cursor.execute(statement)
-
-
 class RaceResultStorage(Storage):
 
     def __init__(self, jockey_filename, horse_filename, trainer_filename):
         self._jockey_storage = PathStorage(jockey_filename)
         self._horse_storage = PathStorage(horse_filename)
         self._trainer_storage = PathStorage(trainer_filename)
-        self._mysql = MySQL()
+        with open('conf/db.json', 'r') as f:
+            string = 'postgresql+psycopg2://{user}:{passwd}@{host}/{db}'
+            engine = create_engine(string.format(**json.load(f)), echo=True)
+
+        Session = sessionmaker(bind=engine)
+        self.session = Session()
 
     def store(self, data):
         self._jockey_storage.store(data['jockey'])
         self._horse_storage.store(data['horse'])
         self._trainer_storage.store(data['trainer'])
 
-        self._mysql.manyinsert('race_result', data['result'])
-        self._mysql.insert('race_info', data['info'])
+        for record in data['result']:
+            self.session.add(model.RaceResult(**record))
+
+        self.session.add(model.RaceInfo(**data['info']))
+        self.session.commit()
