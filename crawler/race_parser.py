@@ -28,7 +28,7 @@ class RaceResultParser(Parser):
         self.regex['meta'] = re.compile(r"(.+?)・(.+?) (\d+?)m \[コースガイド\]"
                             " \| 天気： \| 馬場： \| (.+?) \| (.+?)"
                             " \| (.+?) \|")
-        self.grades = ['新馬', '未勝利', '500万下', '900万下',
+        self.grades = ['新馬', '未勝利', '未出走', '500万下', '900万下',
                 '1000万下', '1600万下', 'オープン']
 
     def parse(self, soup):
@@ -69,7 +69,7 @@ class RaceResultParser(Parser):
         elif raw.count('.') == 2:
             t = dt.strptime(raw, '%M.%S.%f').time()
         else:
-            raise
+            t = None
 
         return t
 
@@ -100,7 +100,6 @@ class RaceResultParser(Parser):
             return {k: v.strip() for k, v in res.items()}
 
         res['time'] = self._parse_time(record[6].text)
-        print(res)
         res['margin'] = record[7].text
         res['passing_position'] = record[8].text
 
