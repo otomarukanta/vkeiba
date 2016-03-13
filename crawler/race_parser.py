@@ -93,19 +93,17 @@ class RaceResultParser(Parser):
             res['horse_weight'] = '-1'
         if res['final_position'].strip() == '除外':
             return {k: v.strip() for k, v in res.items()}
-        weight = self.regex['weight'].findall(record[11].text)[0][0]
+        res['popularity'] = record[12].text
         res['odds'] = record[13].text
         res['blinker'] = record[14].text
         if res['final_position'].strip() == '中止':
             return {k: v.strip() for k, v in res.items()}
 
         res['time'] = self._parse_time(record[6].text)
-        res['margin'] = record[7].text
+        res['margin'] = record[7].text.strip()
         res['passing_position'] = record[8].text
-
         res['last_3f'] = self._parse_time(record[9].text)
 
-        res['popularity'] = record[12].text
 
         return res
 #         return {k: v.strip() for k, v in res.items()}

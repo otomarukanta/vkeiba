@@ -4,6 +4,7 @@ import bs4
 from unittest import TestCase
 from nose.tools import eq_
 from crawler import parser
+from crawler import race_parser
 
 resources_dir = '{}/resources/'.format(os.path.dirname(__file__))
 
@@ -24,20 +25,23 @@ class TestParser(TestCase):
         eq_(expected, actual)
 
     def test_race_result(self):
-        with open('{}/race_result.json'.format(resources_dir)) as f:
-            expected = json.load(f)
+        from tests.resources import race_result
         with open('{}race_result.html'.format(resources_dir), 'r') as f:
             soup = bs4.BeautifulSoup(f.read(), 'lxml')
-        actual = parser.parse_race_result(soup)
-        eq_(expected, actual)
+        actual = race_parser.RaceResultParser().parse(soup)
+        expected = race_result.expected
+        try:
+            eq_(actual, expected)
+        except AssertionError:
+            for k, v in expected.items():
+                self.assertEqual(actual[k], v)
 
     def test_horse(self):
-        with open('{}/horse.json'.format(resources_dir)) as f:
-            expected = json.load(f)
+        from tests.resources import horse
         with open('{}horse.html'.format(resources_dir), 'r') as f:
             soup = bs4.BeautifulSoup(f.read(), 'lxml')
         actual = parser.parse_horse(soup)
-        eq_(expected, actual)
+        eq_(horse.expected, actual)
 
     def test_jockey(self):
         with open('{}/jockey.json'.format(resources_dir)) as f:
