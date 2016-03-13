@@ -3,9 +3,7 @@ import aiohttp
 import asyncio
 import bs4
 from datetime import datetime
-import os
-import hashlib
-import gzip
+from crawler.cachedb import CacheDB
 
 
 class Scraper(metaclass=ABCMeta):
@@ -15,24 +13,7 @@ class Scraper(metaclass=ABCMeta):
         self._semaphore = asyncio.Semaphore(5)
         self._parse = parse
         self._store = store
-
-    def _hash(self, path):
-        return 'cache/{}'.format(hashlib.md5(path.encode('utf-8')).hexdigest())
-
-    def _contains_cache(self, path):
-        return os.path.exists(self._hash(path))
-
-    def _get_cache(self, path):
-        print('Get page from cache in {} at {}'.format(path, datetime.now()))
-        with gzip.open(self._hash(path), 'rb') as f:
-            data = f.read()
-        return data
-
-    def _save_cache(self, path, page):
-        if not os.path.isdir('cache'):
-            os.mkdir('cache')
-        with gzip.open(self._hash(path), 'wb') as f:
-            f.write(page.encode('utf-8'))
+        self._cache_db = CacheDB()
 
     async def download(self, path):
         print('starting download {} at {}'.format(path, datetime.now()))
@@ -41,12 +22,11 @@ class Scraper(metaclass=ABCMeta):
         return await res.text()
 
     async def _scrape(self, path):
-        if self._contains_cache(path):
-            page = self._get_cache(path)
-        else:
+        page = self._cache_db.get(path)
+        if page is None:
             with (await self._semaphore):
                 page = await self.download(path)
-            self._save_cache(path, page)
+            self._cache_db.put(path, page)
         soup = bs4.BeautifulSoup(page, 'lxml')
         parsed = self._parse(soup)
         self._store(parsed)
