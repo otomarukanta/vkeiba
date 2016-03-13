@@ -1,5 +1,4 @@
 import os
-import gzip
 from datetime import datetime
 import dbm
 

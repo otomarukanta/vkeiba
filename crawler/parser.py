@@ -1,6 +1,4 @@
-import re
 from datetime import datetime as dt
-from datetime import date
 
 
 def parse_horse(soup):
@@ -72,19 +70,3 @@ def parse_trainer(soup):
     res['license'] = lis[2].text.split('：')[1]
 
     return res
-
-regex_race_id = re.compile("race\/result\/(\d+)")
-regex_path = re.compile("/\w+/\w+/(\d+)/")
-regex_sex_age = re.compile("(\w+?)(\d+)")
-regex_jockey_weight = re.compile("\w*?(\d+\.\d+)")
-regex_weight = re.compile("(\d*)\((.*?)\)")
-regex_day = re.compile(r"(\d*)年(\d*)月(\d*)日.*?(\d*)回"
-                       "(.*?)(\d)日.*?(\d*:\d*)発走")
-regex_title = re.compile(r"競馬 - (.+?) 結果 - スポーツナビ")
-regex_meta = re.compile(r"(.+?)・(.+?) (\d+?)m \[コースガイド\]"
-                        " \| 天気： \| 馬場： \| (.+?) \| (.+?)"
-                        " \| (.+?) \|")
-grades = ['新馬', '未勝利', '500万下', '900万下',
-          '1000万下', '1600万下', 'オープン']
-
-

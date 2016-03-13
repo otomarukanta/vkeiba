@@ -2,7 +2,6 @@ import re
 from abc import ABCMeta, abstractmethod
 from datetime import datetime as dt
 from datetime import date
-from datetime import time
 
 
 class Parser(metaclass=ABCMeta):
@@ -10,6 +9,7 @@ class Parser(metaclass=ABCMeta):
     @abstractmethod
     def parse(self, soup):
         pass
+
 
 class RaceResultParser(Parser):
 
@@ -23,13 +23,14 @@ class RaceResultParser(Parser):
         self.regex['jockey_weight'] = re.compile("\w*?(\d+\.\d+)")
         self.regex['weight'] = re.compile("(\d*)\((.*?)\)")
         self.regex['day'] = re.compile(r"(\d*)年(\d*)月(\d*)日.*?(\d*)回"
-                        "(.*?)(\d*)日.*?(\d*:\d*)発走")
+                                       "(.*?)(\d*)日.*?(\d*:\d*)発走")
         self.regex['title'] = re.compile(r"競馬 - (.+?) 結果 - スポーツナビ")
-        self.regex['meta'] = re.compile(r"(.+?)・(.+?) (\d+?)m \[コースガイド\]"
-                            " \| 天気： \| 馬場： \| (.+?) \| (.+?)"
-                            " \| (.+?) \|")
+        self.regex['meta'] = re.compile(
+            r"(.+?)・(.+?) (\d+?)m \[コースガイド\]"
+            " \| 天気： \| 馬場： \| (.+?) \| (.+?)"
+            " \| (.+?) \|")
         self.grades = ['新馬', '未勝利', '未出走', '500万下', '900万下',
-                '1000万下', '1600万下', 'オープン']
+                       '1000万下', '1600万下', 'オープン']
 
     def parse(self, soup):
         res = dict()
@@ -76,11 +77,13 @@ class RaceResultParser(Parser):
     def trim_record(self, record, idx):
         res = dict()
         res['row_id'] = str(idx)
-        res['final_position'] = self.regex['final_position'].findall(record[0].text)[0]
+        res['final_position'] = self.regex['final_position'] \
+            .findall(record[0].text)[0]
         res['frame_number'] = record[1].text
         res['horse_number'] = record[2].text
         res['horse_id'] = self.regex['path'].findall(record[3].a['href'])[0]
-        res['sex'], res['age'] = self.regex['sex_age'].findall(record[4].text)[0]
+        res['sex'], res['age'] = self.regex['sex_age'] \
+            .findall(record[4].text)[0]
         res['jockey_id'] = self.regex['path'].findall(record[5].a['href'])[0]
         res['jockey_weight'] = self.regex['jockey_weight'].findall(
             record[10].text)[0]
@@ -104,9 +107,7 @@ class RaceResultParser(Parser):
         res['passing_position'] = record[8].text
         res['last_3f'] = self._parse_time(record[9].text)
 
-
         return res
-#         return {k: v.strip() for k, v in res.items()}
 
     def parse_info(self, soup):
         # race_info
@@ -163,4 +164,5 @@ class RaceResultParser(Parser):
         return links
 
     def _get_url(self, soup):
-        return soup.find_all('meta', attrs={'property': 'og:url'})[0]['content']
+        return soup.find_all('meta',
+                             attrs={'property': 'og:url'})[0]['content']
