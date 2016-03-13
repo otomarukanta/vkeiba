@@ -39,7 +39,7 @@ class RaceResultStorage(Storage):
         self._trainer_storage = PathStorage(trainer_filename)
         with open('conf/db.json', 'r') as f:
             string = 'postgresql+psycopg2://{user}:{passwd}@{host}/{db}'
-            engine = create_engine(string.format(**json.load(f)), echo=True)
+            engine = create_engine(string.format(**json.load(f)))
 
         Session = sessionmaker(bind=engine)
         self.session = Session()
