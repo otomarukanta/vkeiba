@@ -1,5 +1,3 @@
-import os
-from datetime import datetime
 import dbm
 import codecs
 
@@ -12,11 +10,11 @@ class CacheDB():
     def __init__(self):
         pass
 
-    def _contains_cache(self, path):
-        return os.path.exists(self._hash(path))
+    def contains(self, path):
+        with dbm.open(self._db_filename, 'c') as db:
+            return path in db
 
     def get(self, path):
-        print('Get page from cache in {} at {}'.format(path, datetime.now()))
         with dbm.open(self._db_filename, 'c') as db:
             page = db.get(path)
         if page is None:
